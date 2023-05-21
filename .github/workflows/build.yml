@@ -1,0 +1,43 @@
+name: Build
+on:
+  schedule:
+    - cron: "21 21 * * *"
+  push:
+    branches: ["main"]
+
+env:
+  REGISTRY: ghcr.io
+  SERVER_IMAGE_NAME: "f38-server"
+  SERVER_IMAGE_DIR: "f38-server"
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  REGISTRY_USER: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+
+
+jobs:
+  f38-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Build container image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          context: ${{ env.SERVER_IMAGE_DIR }}
+          containerfiles: ${{ env.SERVER_IMAGE_DIR }}/Containerfile
+          image: ${{ env.SERVER_IMAGE_NAME }}
+          layers: false
+          oci: true
+
+      - name: Push to ghcr.io
+        uses: redhat-actions/push-to-registry@v2.6
+        with:
+          image: ${{ env.SERVER_IMAGE_NAME }}
+          tags: "latest"
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          extra-args: |
+            --disable-content-trust
+            
