@@ -27,6 +27,6 @@ RUN rpm-ostree install zfs && \
 RUN test -h /usr/bin/ld && rm -v /usr/bin/ld
 
 RUN rpm-ostree install \
-	distrobox iotop screen vim fuse-encfs borgbackup htop rclone ipmitool fuse-sshfs smartmontools nut lm_sensors hddtemp \
+	distrobox iotop screen vim fuse-encfs borgbackup htop rclone ipmitool fuse-sshfs smartmontools nut lm_sensors hddtemp stress-ng \
 	&& rm -vrf /var && ostree container commit
 
