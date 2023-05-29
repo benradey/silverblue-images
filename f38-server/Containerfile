@@ -37,6 +37,7 @@ RUN rpm-ostree install \
     iotop \
     ipmitool \
     lm_sensors \
+    net-tools \
     nginx \
     nut \
     pv \
