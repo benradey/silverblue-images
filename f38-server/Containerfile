@@ -26,6 +26,11 @@ RUN rpm-ostree install zfs && \
 # TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
 RUN test -h /usr/bin/ld && rm -v /usr/bin/ld
 
+# Install zrepl repository
+COPY zrepl.asc /var/roothome/zrepl.asc
+RUN rpm --import /var/roothome/zrepl.asc
+COPY zrepl.repo /etc/yum.repos.d/zrepl.repo
+
 RUN rpm-ostree install \
     borgbackup \
     certbot \
@@ -47,5 +52,6 @@ RUN rpm-ostree install \
     stress-ng \
     telnet \
     vim \
+    zrepl \
     && rm -vrf /var && ostree container commit
 
