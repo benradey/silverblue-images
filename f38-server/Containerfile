@@ -47,6 +47,5 @@ RUN rpm-ostree install \
     stress-ng \
     telnet \
     vim \
-    zfsnap \
     && rm -vrf /var && ostree container commit
 
