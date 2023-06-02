@@ -46,6 +46,7 @@ RUN rpm-ostree install \
     nginx \
     nut \
     pv \
+    python3-certbot-nginx \
     rclone \
     screen \
     smartmontools \
