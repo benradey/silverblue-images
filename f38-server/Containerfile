@@ -41,6 +41,7 @@ RUN rpm-ostree install \
     htop \
     iotop \
     ipmitool \
+    libvirt \
     lm_sensors \
     net-tools \
     nginx \
@@ -53,7 +54,6 @@ RUN rpm-ostree install \
     stress-ng \
     telnet \
     vim \
-    wireguard-tools \
     zrepl-v0.6.0-1.x86_64 \
     && rm -vrf /var && ostree container commit
 
