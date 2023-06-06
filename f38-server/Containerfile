@@ -48,6 +48,7 @@ RUN rpm-ostree install \
     nut \
     pv \
     python3-certbot-nginx \
+    qemu-kvm \
     rclone \
     screen \
     smartmontools \
