@@ -56,7 +56,6 @@ RUN rpm-ostree install \
     stress-ng \
     telnet \
     vim \
-    virt-manager \
     zrepl-v0.6.0-1.x86_64 \
     && ln -s netcat /usr/bin/nc \
     && rm -vrf /var && ostree container commit
