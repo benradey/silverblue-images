@@ -53,6 +53,7 @@ RUN rpm-ostree install \
     rclone \
     screen \
     smartmontools \
+    strace \
     stress-ng \
     telnet \
     vim \
