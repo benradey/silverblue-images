@@ -73,7 +73,5 @@ RUN rpm-ostree install \
     vim \
     zrepl-v0.6.0-1.x86_64 \
     && ln -s /usr/bin/netcat /usr/bin/nc \
-    && ln -s /usr/bin/rclone /usr/sbin/mount.rclone \
-    && ln -s /usr/bin/rclone /usr/bin/rclonefs \
     && rm -vrf /var && ostree container commit
 
