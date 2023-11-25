@@ -53,6 +53,7 @@ RUN rpm-ostree install \
     fuse-sshfs \
     hddtemp \
     htop \
+    iftop \
     iotop \
     ipmitool \
     libvirt \
