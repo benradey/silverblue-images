@@ -46,6 +46,7 @@ RUN rpm --import /var/roothome/zrepl.asc
 COPY zrepl.repo /etc/yum.repos.d/zrepl.repo
 
 RUN rpm-ostree install \
+    ansible \
     borgbackup \
     certbot \
     distrobox \
