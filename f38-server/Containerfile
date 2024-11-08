@@ -10,9 +10,35 @@ WORKDIR /gocryptfs
 RUN ./build-without-openssl.bash
 
 # ====== Stage 2: Server image ======
-FROM quay.io/fedora/fedora-silverblue:40
+FROM quay.io/fedora/fedora-silverblue:39
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
+
+# Install ZFS repository
+RUN rpm-ostree install https://github.com/zfsonlinux/zfsonlinux.github.com/raw/master/fedora/zfs-release-2-4$(rpm --eval "%{dist}").noarch.rpm && \
+    # cleanup and verification stage
+    rm -vrf /var /*.rpm && \
+    ostree container commit
+
+# Install ZFS build deps
+RUN rpm-ostree install \
+    kernel-devel kernel-devel-matched kernel-headers kernel-srpm-macros && \
+    # cleanup and verification stage
+    rm -vrf /var && \
+    ostree container commit
+
+# TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
+RUN test -f /usr/bin/ld || ln -s /usr/bin/ld.bfd /usr/bin/ld
+
+# Install zfs
+RUN rpm-ostree install zfs && \
+    dkms autoinstall -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
+    # cleanup and verification stage
+    rm -vrf /var && \
+    ostree container commit
+
+# TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
+RUN test -h /usr/bin/ld && rm -v /usr/bin/ld
 
 # Install zrepl repository
 COPY zrepl.asc /var/roothome/zrepl.asc
@@ -20,81 +46,35 @@ RUN rpm --import /var/roothome/zrepl.asc
 COPY zrepl.repo /etc/yum.repos.d/zrepl.repo
 
 RUN rpm-ostree install \
-  `# ===== SECTION 1: ZFS BUILD DEPENDENCIES =====` \
-  autoconf \
-  automake \
-  dkms \
-  elfutils-libelf-devel \
-  gcc \
-  git \
-  kernel-devel \
-  libaio-devel \
-  libattr-devel \
-  libblkid-devel \
-  libcurl-devel \
-  libffi-devel \
-  libtirpc-devel \
-  libtool \
-  libudev-devel \
-  libuuid-devel \
-  make \
-  ncompress \
-  openssl-devel \
-  pam-devel \
-  python-packaging \
-  python3 \
-  python3-cffi \
-  python3-devel \
-  python3-setuptools \
-  rpm-build \
-  zlib-devel \
-  `# ===== SECTION 2: UTILITIES =====` \
-  ansible \
-  borgbackup \
-  certbot \
-  distrobox \
-  fuse-encfs \
-  fuse-sshfs \
-  hddtemp \
-  htop \
-  iftop \
-  iotop \
-  ipmitool \
-  libvirt \
-  lm_sensors \
-  net-tools \
-  netcat \
-  nginx \
-  nut \
-  pv \
-  python3-certbot-nginx \
-  qemu-kvm \
-  rclone \
-  screen \
-  smartmontools \
-  strace \
-  stress-ng \
-  telnet \
-  vim \
-  zrepl-v0.6.0-1.x86_64 \
-  && rm -vrf /var && ostree container commit
+    ansible \
+    borgbackup \
+    certbot \
+    distrobox \
+    fuse-encfs \
+    fuse-sshfs \
+    hddtemp \
+    htop \
+    iftop \
+    iotop \
+    ipmitool \
+    libvirt \
+    lm_sensors \
+    net-tools \
+    netcat \
+    nginx \
+    nut \
+    pv \
+    python3-certbot-nginx \
+    qemu-kvm \
+    rclone \
+    screen \
+    smartmontools \
+    strace \
+    stress-ng \
+    telnet \
+    vim \
+    zrepl-v0.6.0-1.x86_64 \
+    && ln -s /usr/bin/netcat /usr/bin/nc \
+    && rm -vrf /var && ostree container commit
 
-# TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
-RUN test -f /usr/bin/ld || ln -s /usr/bin/ld.bfd /usr/bin/ld
-
-RUN git clone https://github.com/openzfs/zfs \
-  && cd /zfs \
-  && sh autogen.sh \
-  && ./configure --prefix=/var/usrlocal --enable-pam \
-  && make -s -j$(nproc) \
-  && make install \
-  && ldconfig \
-  && depmod $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') \
-  && dkms autoinstall -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') \
-  && cd / \
-  && rm -vrf /var /zfs \
-  && ostree container commit
-
-# TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
-RUN test -h /usr/bin/ld && rm -v /usr/bin/ld
 
