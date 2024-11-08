@@ -10,7 +10,7 @@ WORKDIR /gocryptfs
 RUN ./build-without-openssl.bash
 
 # ====== Stage 2: Server image ======
-FROM quay.io/fedora/fedora-silverblue:40
+FROM quay.io/fedora/fedora-silverblue:41
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
@@ -40,6 +40,7 @@ RUN rpm-ostree install \
   make \
   ncompress \
   openssl-devel \
+  pam-devel \
   python-packaging \
   python3 \
   python3-cffi \
@@ -76,7 +77,6 @@ RUN rpm-ostree install \
   telnet \
   vim \
   zrepl-v0.6.0-1.x86_64 \
-  && ln -s /usr/bin/netcat /usr/bin/nc \
   && rm -vrf /var && ostree container commit
 
 # TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
@@ -85,7 +85,7 @@ RUN test -f /usr/bin/ld || ln -s /usr/bin/ld.bfd /usr/bin/ld
 RUN git clone https://github.com/openzfs/zfs \
   && cd /zfs \
   && sh autogen.sh \
-  && ./configure --prefix=/var/usrlocal \
+  && ./configure --prefix=/var/usrlocal --enable-pam \
   && make -s -j$(nproc) \
   && make install \
   && ldconfig \
