@@ -10,7 +10,7 @@ WORKDIR /gocryptfs
 RUN ./build-without-openssl.bash
 
 # ====== Stage 2: Server image ======
-FROM quay.io/fedora/fedora-silverblue:41
+FROM quay.io/fedora/fedora-silverblue:40
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
