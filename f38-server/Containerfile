@@ -10,7 +10,7 @@ WORKDIR /gocryptfs
 RUN ./build-without-openssl.bash
 
 # ====== Stage 2: Server image ======
-FROM quay.io/fedora/fedora-silverblue:40
+FROM quay.io/fedora/fedora-silverblue:41
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
@@ -74,7 +74,6 @@ RUN rpm-ostree install \
     telnet \
     vim \
     zrepl-v0.6.0-1.x86_64 \
-    && ln -s /usr/bin/netcat /usr/bin/nc \
     && rm -vrf /var && ostree container commit
 
 
