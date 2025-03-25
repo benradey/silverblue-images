@@ -50,6 +50,7 @@ RUN rpm-ostree install \
     borgbackup \
     certbot \
     distrobox \
+    fail2ban \
     fuse-encfs \
     fuse-sshfs \
     hddtemp \
