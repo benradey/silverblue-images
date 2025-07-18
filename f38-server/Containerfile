@@ -45,6 +45,9 @@ COPY zrepl.asc /var/roothome/zrepl.asc
 RUN rpm --import /var/roothome/zrepl.asc
 COPY zrepl.repo /etc/yum.repos.d/zrepl.repo
 
+# Install smallstep repository
+COPY smallstep.repo /etc/yum.repos.d/smallstep.repo
+
 RUN rpm-ostree install \
     ansible \
     borgbackup \
@@ -70,6 +73,7 @@ RUN rpm-ostree install \
     rclone \
     screen \
     smartmontools \
+    step-cli \
     strace \
     stress-ng \
     telnet \
