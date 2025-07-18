@@ -10,12 +10,12 @@ WORKDIR /gocryptfs
 RUN ./build-without-openssl.bash
 
 # ====== Stage 2: Server image ======
-FROM quay.io/fedora/fedora-silverblue:41
+FROM quay.io/fedora/fedora-silverblue:42
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
 # Install ZFS repository
-RUN rpm-ostree install https://github.com/zfsonlinux/zfsonlinux.github.com/raw/master/fedora/zfs-release-2-6$(rpm --eval "%{dist}").noarch.rpm && \
+RUN rpm-ostree install https://github.com/zfsonlinux/zfsonlinux.github.com/raw/master/fedora/zfs-release-2-8$(rpm --eval "%{dist}").noarch.rpm && \
     # cleanup and verification stage
     rm -vrf /var /*.rpm && \
     ostree container commit
