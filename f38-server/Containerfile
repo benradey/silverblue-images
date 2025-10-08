@@ -10,7 +10,7 @@ WORKDIR /gocryptfs
 RUN ./build-without-openssl.bash
 
 # ====== Stage 2: Server image ======
-FROM quay.io/fedora/fedora-silverblue:42
+FROM quay.io/fedora/fedora-silverblue:41
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
@@ -67,6 +67,7 @@ RUN rpm-ostree install \
     netcat \
     nginx \
     nut \
+    ostree-grub2 \
     pv \
     python3-certbot-nginx \
     qemu-kvm \
