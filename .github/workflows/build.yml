@@ -8,15 +8,15 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  SERVER_IMAGE_NAME: "f38-server"
-  SERVER_IMAGE_DIR: "f38-server"
+  SERVER_IMAGE_NAME: "f42-server"
+  SERVER_IMAGE_DIR: "f42-server"
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
   REGISTRY_USER: ${{ github.actor }}
   REGISTRY_PASSWORD: ${{ github.token }}
 
 
 jobs:
-  f38-server:
+  f42-server:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
