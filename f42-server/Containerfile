@@ -14,13 +14,20 @@ FROM quay.io/fedora/fedora-silverblue:42
 
 COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
-# Set up Synapse SELinux policy
+# Set up custom SELinux policies
 COPY synapse.te /tmp/synapse.te
+COPY benZfsSnapshotAutomount.te /tmp/benZfsSnapshotAutomount.te
 RUN checkmodule -M -m -o /tmp/synapse.mod /tmp/synapse.te \
     && semodule_package -o /tmp/synapse.pp -m /tmp/synapse.mod \
     && semodule -r synapse || true \
     && semodule -i /tmp/synapse.pp \
-    && rm -f /tmp/synapse.{te,mod,pp}
+    && rm -f /tmp/synapse.{te,mod,pp} \
+    && checkmodule -M -m -o /tmp/benZfsSnapshotAutomount.mod /tmp/benZfsSnapshotAutomount.te \
+    && semodule_package -o /tmp/benZfsSnapshotAutomount.pp -m /tmp/benZfsSnapshotAutomount.mod \
+    && semodule -r benZfsSnapshotAutomount || true \
+    && semodule -i /tmp/benZfsSnapshotAutomount.pp \
+    && rm -f /tmp/benZfsSnapshotAutomount.{te,mod,pp}
+
 
 # Install ZFS repository
 RUN rpm-ostree install https://github.com/zfsonlinux/zfsonlinux.github.com/raw/master/fedora/zfs-release-2-8$(rpm --eval "%{dist}").noarch.rpm && \
