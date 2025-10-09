@@ -18,6 +18,7 @@ COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 COPY synapse.te /tmp/synapse.te
 RUN checkmodule -M -m -o /tmp/synapse.mod /tmp/synapse.te \
     && semodule_package -o /tmp/synapse.pp -m /tmp/synapse.mod \
+    && semodule -r synapse || true \
     && semodule -i /tmp/synapse.pp \
     && rm -f /tmp/synapse.{te,mod,pp}
 
