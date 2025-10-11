@@ -30,27 +30,23 @@ COPY --from=builder /gocryptfs/gocryptfs /usr/bin/gocryptfs
 
 
 # Install ZFS repository
-RUN rpm-ostree install https://github.com/zfsonlinux/zfsonlinux.github.com/raw/master/fedora/zfs-release-2-8$(rpm --eval "%{dist}").noarch.rpm && \
+RUN dnf install -y https://github.com/zfsonlinux/zfsonlinux.github.com/raw/master/fedora/zfs-release-2-8$(rpm --eval "%{dist}").noarch.rpm && \
     # cleanup and verification stage
-    rm -vrf /var /*.rpm && \
-    ostree container commit
+    dnf clean all
 
 # Install ZFS build deps
-RUN rpm-ostree install \
+RUN dnf install -y \
     kernel-devel kernel-devel-matched kernel-headers kernel-srpm-macros && \
     # cleanup and verification stage
-    rm -vrf /var && \
-    ostree container commit
+    dnf clean all
 
 # TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
 RUN test -f /usr/bin/ld || ln -s /usr/bin/ld.bfd /usr/bin/ld
 
 # Install zfs
-RUN rpm-ostree install zfs && \
-    dkms autoinstall -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
-    # cleanup and verification stage
-    rm -vrf /var && \
-    ostree container commit
+RUN dnf install -y zfs && \
+    dkms autoinstall -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') \
+    && dnf clean all
 
 # TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
 RUN test -h /usr/bin/ld && rm -v /usr/bin/ld
@@ -63,7 +59,7 @@ COPY zrepl.repo /etc/yum.repos.d/zrepl.repo
 # Install smallstep repository
 COPY smallstep.repo /etc/yum.repos.d/smallstep.repo
 
-RUN rpm-ostree install \
+RUN dnf install -y \
     ansible \
     borgbackup \
     certbot \
@@ -82,7 +78,6 @@ RUN rpm-ostree install \
     netcat \
     nginx \
     nut \
-    ostree-grub2 \
     pv \
     python3-certbot-nginx \
     qemu-kvm \
@@ -94,7 +89,16 @@ RUN rpm-ostree install \
     stress-ng \
     telnet \
     vim \
-    zrepl-v0.6.0-1.x86_64 \
-    && rm -vrf /var && ostree container commit
+    zrepl-v0.6.0-1.x86_64
 
+# Cleanup image for linting
+RUN test -f /usr/lib/sysusers.d/libvirt.conf || echo -e 'g libvirt 963' > /usr/lib/sysusers.d/libvirt.conf && \
+    test -f /usr/lib/sysusers.d/qat.conf || echo -e 'g qat 995' > /usr/lib/sysusers.d/qat.conf
+
+# Cleanup image for linting
+RUN rm -rf /var && mkdir /var && \
+    rm -rf /boot && mkdir /boot
+
+# Verify image is good
+RUN bootc container lint --fatal-warnings --skip baseimage-composefs
 
