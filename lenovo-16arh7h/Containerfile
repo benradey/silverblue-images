@@ -1,31 +1,35 @@
-FROM quay.io/fedora/fedora-silverblue:42
-
-# TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
-#RUN test -f /usr/bin/ld || ln -s /usr/bin/ld.bfd /usr/bin/ld
-
-# TODO: Remove the following line once this bug is fixed: https://github.com/coreos/rpm-ostree/issues/4201
-#RUN test -h /usr/bin/ld && rm -v /usr/bin/ld
+FROM quay.io/fedora/fedora-silverblue:43
 
 RUN dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-      https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-    dnf install -y \
+      https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm \
+      https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d' ' -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm && \
+    dnf5 install -y \
       akmods \
+      android-tools \
       ansible \
+      audacity \
+      baobab \
+      buildah \
+      cinnamon \
       distrobox \
       fuse-sshfs \
       htop \
       iftop \
       iotop \
+      nvtop \
+      radeontop \
+      solaar \
+      steam \
+      syncthing \
       vim && \
-    dnf5 install -y akmod-nvidia nvtop && \
     dnf5 clean all
 
+# TODO: Remove this `|| true` hack once post scriptlets no longer make dnf exit with non-zero
+RUN dnf5 install -y akmod-nvidia proton-vpn-gnome-desktop || true
+# TODO: Remove these unnecessary checks to make sure the packages above actually got installed. rpm exits non-zero if the package is not installed and aborts the Containerfile build
+RUN rpm -q akmod-nvidia && rpm -q proton-vpn-gnome-desktop
+
 RUN /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-
-
-# Cleanup image for linting
-RUN test -f /usr/lib/sysusers.d/libvirt.conf || echo -e 'g libvirt 963' > /usr/lib/sysusers.d/libvirt.conf && \
-    test -f /usr/lib/sysusers.d/qat.conf || echo -e 'g qat 995' > /usr/lib/sysusers.d/qat.conf
 
 # Cleanup image for linting
 RUN rm -rf /var && mkdir /var && \
