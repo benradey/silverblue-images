@@ -9,10 +9,11 @@ RUN dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rel
       ansible \
       audacity \
       baobab \
-      buildah \
       cinnamon \
       distrobox \
+      dkms \
       fuse-sshfs \
+      geany \
       htop \
       iftop \
       iotop \
@@ -30,6 +31,13 @@ RUN dnf5 install -y akmod-nvidia proton-vpn-gnome-desktop || true
 RUN rpm -q akmod-nvidia && rpm -q proton-vpn-gnome-desktop
 
 RUN /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+
+RUN git clone https://github.com/johnfanv2/LenovoLegionLinux.git && \
+    mkdir -p /usr/src/LenovoLegionLinux-1.0.0 && \
+    cp /LenovoLegionLinux/kernel_module/* /usr/src/LenovoLegionLinux-1.0.0 -r && \
+    dkms add -m LenovoLegionLinux -v 1.0.0 && \
+    dkms build -m LenovoLegionLinux -v 1.0.0 -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
+    rm -rf LenovoLegionLinux
 
 # Cleanup image for linting
 RUN rm -rf /var && mkdir /var && \
