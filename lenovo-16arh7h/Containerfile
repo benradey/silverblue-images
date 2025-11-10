@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-silverblue:43
+FROM quay.io/fedora/fedora-bootc:43
 
 COPY gpg-keys/* /keys/
 
@@ -22,6 +22,7 @@ RUN rpm --import \
       dkms \
       fuse-sshfs \
       geany \
+      git \
       htop \
       iftop \
       iotop \
