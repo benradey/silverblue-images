@@ -19,6 +19,7 @@ RUN rpm --import \
       distrobox \
       dkms \
       fuse-sshfs \
+      geany \
       git \
       htop \
       iftop \
@@ -31,7 +32,6 @@ RUN rpm --import \
     dnf5 clean all
 # Following as flatpaks?
 # audacity
-# geany
 # solaar
 
 # TODO: Remove this `|| true` hack once post scriptlets no longer make dnf exit with non-zero
