@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-bootc:43
+FROM quay.io/fedora/fedora-silverblue:43
 
 COPY gpg-keys/* /keys/
 
@@ -15,24 +15,24 @@ RUN rpm --import \
       akmods \
       android-tools \
       ansible \
-      audacity \
-      baobab \
       cinnamon \
       distrobox \
       dkms \
       fuse-sshfs \
-      geany \
       git \
       htop \
       iftop \
       iotop \
       nvtop \
       radeontop \
-      solaar \
       steam \
       syncthing \
       vim && \
     dnf5 clean all
+# Following as flatpaks?
+# audacity
+# geany
+# solaar
 
 # TODO: Remove this `|| true` hack once post scriptlets no longer make dnf exit with non-zero
 RUN dnf5 install -y akmod-nvidia proton-vpn-gnome-desktop || true
