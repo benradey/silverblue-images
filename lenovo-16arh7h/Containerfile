@@ -30,6 +30,7 @@ RUN rpm --import \
       libavcodec-freeworld \
       libva-nvidia-driver \
       nvtop \
+      python3-pyusb \
       radeontop \
       steam \
       syncthing \
