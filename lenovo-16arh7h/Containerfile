@@ -2,6 +2,8 @@ FROM quay.io/fedora/fedora-silverblue:43
 
 COPY gpg-keys/* /keys/
 
+RUN wget -O /etc/udev/rules.d/42-logitech-unify-permissions.rules https://raw.githubusercontent.com/pwr-Solaar/Solaar/refs/heads/master/rules.d-uinput/42-logitech-unify-permissions.rules
+
 RUN rpm --import \
       /keys/public_key_proton.asc \
       /keys/RPM-GPG-KEY-rpmfusion-free-fedora-2020 \
@@ -36,9 +38,6 @@ RUN rpm --import \
     dnf5 swap mesa-va-drivers mesa-va-drivers-freeworld && \
     dnf5 swap swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld && \
     dnf5 clean all
-# Following as flatpaks?
-# audacity
-# solaar
 
 # TODO: Remove this `|| true` hack once post scriptlets no longer make dnf exit with non-zero
 RUN dnf5 install -y akmod-nvidia proton-vpn-gnome-desktop || true
