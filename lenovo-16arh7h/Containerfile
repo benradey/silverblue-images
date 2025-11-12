@@ -53,7 +53,7 @@ RUN git clone https://github.com/johnfanv2/LenovoLegionLinux.git && \
     cp /LenovoLegionLinux/kernel_module/* /usr/src/LenovoLegionLinux-1.0.0 -r && \
     dkms add -m LenovoLegionLinux -v 1.0.0 && \
     dkms build -m LenovoLegionLinux -v 1.0.0 -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
-    dkms install -m LenovoLegionLinux -v 1.0.0 && \
+    dkms install -m LenovoLegionLinux -v 1.0.0 -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
     echo legion-laptop > /etc/modules-load.d/legion_laptop.conf && \
     rm -rf LenovoLegionLinux
 
