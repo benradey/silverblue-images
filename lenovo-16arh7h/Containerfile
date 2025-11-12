@@ -21,6 +21,7 @@ RUN rpm --import \
       fuse-sshfs \
       geany \
       git \
+      gnome-terminal \
       htop \
       iftop \
       iotop \
