@@ -25,12 +25,16 @@ RUN rpm --import \
       htop \
       iftop \
       iotop \
+      libva-nvidia-driver \
       nvtop \
       radeontop \
       steam \
       syncthing \
       vim \
       vulkan-tools && \
+    dnf5 swap ffmpeg-free ffmpeg --allowerasing && \
+    dnf5 swap mesa-va-drivers mesa-va-drivers-freeworld && \
+    dnf5 swap swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld && \
     dnf5 clean all
 # Following as flatpaks?
 # audacity
