@@ -29,7 +29,8 @@ RUN rpm --import \
       radeontop \
       steam \
       syncthing \
-      vim && \
+      vim \
+      vulkan-tools && \
     dnf5 clean all
 # Following as flatpaks?
 # audacity
