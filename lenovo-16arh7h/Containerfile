@@ -31,8 +31,10 @@ RUN rpm --import \
       iotop \
       libavcodec-freeworld \
       libva-nvidia-driver \
+      libvirt \
       nvtop \
       python3-pyusb \
+      qemu-kvm \
       radeontop \
       steam \
       syncthing \
