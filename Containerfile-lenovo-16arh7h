@@ -1,4 +1,4 @@
-FROM ghcr.io/benradey/silverblue-images/asrock-x570:latest
+FROM ghcr.io/benradey/asrock-x570:latest
 
 RUN dnf5 install -y \
       dkms \
