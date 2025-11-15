@@ -22,7 +22,6 @@ RUN rpm --import \
       blueman-nemo \
       cinnamon \
       distrobox \
-      dkms \
       fuse-sshfs \
       geany \
       git \
@@ -34,14 +33,11 @@ RUN rpm --import \
       libva-nvidia-driver \
       numlockx \
       nvtop \
-      python3-pyusb \
-      radeontop \
       steam \
       syncthing \
       vim \
       virt-manager \
-      vulkan-tools \
-      xinput && \
+      vulkan-tools && \
     dnf5 swap -y ffmpeg-free ffmpeg --allowerasing && \
     dnf5 swap -y mesa-va-drivers mesa-va-drivers-freeworld && \
     dnf5 swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld && \
@@ -53,15 +49,6 @@ RUN dnf5 install -y akmod-nvidia xorg-x11-drv-nvidia-cuda proton-vpn-gnome-deskt
 RUN rpm -q akmod-nvidia && rpm -q xorg-x11-drv-nvidia-cuda && rpm -q proton-vpn-gnome-desktop
 
 RUN /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-
-RUN git clone https://github.com/johnfanv2/LenovoLegionLinux.git && \
-    mkdir -p /usr/src/LenovoLegionLinux-1.0.0 && \
-    cp /LenovoLegionLinux/kernel_module/* /usr/src/LenovoLegionLinux-1.0.0 -r && \
-    dkms add -m LenovoLegionLinux -v 1.0.0 && \
-    dkms build -m LenovoLegionLinux -v 1.0.0 -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
-    dkms install -m LenovoLegionLinux -v 1.0.0 -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') && \
-    echo legion-laptop > /etc/modules-load.d/legion_laptop.conf && \
-    rm -rf LenovoLegionLinux
 
 # The first check makes sure that we have exactly 4 gpg pubkeys trusted in the rpmdb (the ones manually imported above).
 # Any more than that means that dnf automatically added a new one, which is shady!
