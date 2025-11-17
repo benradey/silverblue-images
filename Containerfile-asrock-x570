@@ -29,7 +29,6 @@ RUN rpm --import \
       htop \
       iftop \
       iotop \
-      java-latest-openjdk-devel \
       libavcodec-freeworld \
       libva-nvidia-driver \
       numlockx \
