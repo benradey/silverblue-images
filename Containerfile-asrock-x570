@@ -29,12 +29,13 @@ RUN rpm --import \
       htop \
       iftop \
       iotop \
-      libavcodec-freeworld \
       libva-nvidia-driver \
+      libva-utils \
       numlockx \
       nvtop \
       steam \
       syncthing \
+      vdpauinfo \
       vim \
       virt-manager \
       vulkan-tools && \
