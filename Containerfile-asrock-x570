@@ -33,7 +33,6 @@ RUN rpm --import \
       libva-utils \
       numlockx \
       nvtop \
-      steam \
       syncthing \
       vdpauinfo \
       vim \
