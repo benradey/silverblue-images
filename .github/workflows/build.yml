@@ -9,8 +9,9 @@ on:
 env:
   REGISTRY: ghcr.io
   SERVER_IMAGE_NAME: "supermicro-x10drh"
-  LAPTOP_IMAGE_NAME: "lenovo-16arh7h"
-  DESKTOP_IMAGE_NAME: "asrock-x570"
+  WORKSTATION_BASE_IMAGE_NAME: "workstation-nvidia-base"
+  LENOVO_IMAGE_NAME: "lenovo-16arh7h"
+  ASROCK_IMAGE_NAME: "asrock-x570"
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
   REGISTRY_USER: ${{ github.actor }}
   REGISTRY_PASSWORD: ${{ github.token }}
@@ -41,7 +42,7 @@ jobs:
           password: ${{ env.REGISTRY_PASSWORD }}
           extra-args: |
             --disable-content-trust
-  asrock-x570:
+  workstation-nvidia-base:
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -50,7 +51,7 @@ jobs:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
           tool-cache: false
-        
+
           # all of these default to true, but feel free to set to
           # "false" if necessary for your workflow
           android: true
@@ -66,15 +67,56 @@ jobs:
       - name: Build container image
         uses: redhat-actions/buildah-build@v2.12
         with:
-          containerfiles: Containerfile-${{ env.DESKTOP_IMAGE_NAME }}
-          image: ${{ env.DESKTOP_IMAGE_NAME }}
+          containerfiles: Containerfile-${{ env.WORKSTATION_BASE_IMAGE_NAME }}
+          image: ${{ env.WORKSTATION_BASE_IMAGE_NAME }}
           layers: false
           oci: true
 
       - name: Push to ghcr.io
         uses: redhat-actions/push-to-registry@v2.7
         with:
-          image: ${{ env.DESKTOP_IMAGE_NAME }}
+          image: ${{ env.WORKSTATION_BASE_IMAGE_NAME }}
+          tags: "latest"
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          extra-args: |
+            --disable-content-trust
+  asrock-x570:
+    needs: workstation-nvidia-base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Build container image
+        uses: redhat-actions/buildah-build@v2.12
+        with:
+          containerfiles: Containerfile-${{ env.ASROCK_IMAGE_NAME }}
+          image: ${{ env.ASROCK_IMAGE_NAME }}
+          layers: false
+          oci: true
+
+      - name: Push to ghcr.io
+        uses: redhat-actions/push-to-registry@v2.7
+        with:
+          image: ${{ env.ASROCK_IMAGE_NAME }}
           tags: "latest"
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ env.REGISTRY_USER }}
@@ -82,7 +124,7 @@ jobs:
           extra-args: |
             --disable-content-trust
   lenovo-16arh7h:
-    needs: asrock-x570
+    needs: workstation-nvidia-base
     runs-on: ubuntu-latest
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -91,7 +133,7 @@ jobs:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
           tool-cache: false
-        
+
           # all of these default to true, but feel free to set to
           # "false" if necessary for your workflow
           android: true
@@ -107,15 +149,15 @@ jobs:
       - name: Build container image
         uses: redhat-actions/buildah-build@v2.12
         with:
-          containerfiles: Containerfile-${{ env.LAPTOP_IMAGE_NAME }}
-          image: ${{ env.LAPTOP_IMAGE_NAME }}
+          containerfiles: Containerfile-${{ env.LENOVO_IMAGE_NAME }}
+          image: ${{ env.LENOVO_IMAGE_NAME }}
           layers: false
           oci: true
 
       - name: Push to ghcr.io
         uses: redhat-actions/push-to-registry@v2.7
         with:
-          image: ${{ env.LAPTOP_IMAGE_NAME }}
+          image: ${{ env.LENOVO_IMAGE_NAME }}
           tags: "latest"
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ env.REGISTRY_USER }}
