@@ -54,9 +54,6 @@ RUN rpm -q akmod-nvidia && \
     rpm -q xorg-x11-drv-nvidia-cuda && \
     rpm -q proton-vpn-gnome-desktop
 
-RUN sudo sh -c 'echo "%_with_kmod_nvidia_open 0" > /etc/rpm/macros.nvidia-kmod'
-RUN /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-
 # The first check makes sure that we have exactly 4 gpg pubkeys trusted in the rpmdb (the ones manually imported above).
 # Any more than that means that dnf automatically added a new one, which is shady!
 # Then: cleanup image for linting
