@@ -32,7 +32,6 @@ RUN rpm --import \
       libva-nvidia-driver \
       libva-utils \
       numlockx \
-      nvidia-vaapi-driver \
       nvtop \
       steam \
       syncthing \
