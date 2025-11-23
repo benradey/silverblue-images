@@ -1,7 +1,9 @@
 FROM ghcr.io/benradey/workstation-nvidia-base:latest
 
 # Build nvidia akmod with no special arguments - defaults to open kernel driver for newer hardware
-RUN /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+RUN mkdir -p /var/log/akmods /var/cache/akmods/nvidia /var/tmp && \
+    chmod 777 /var/tmp && \
+    /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 
 RUN dnf5 install -y \
       dkms \
