@@ -35,6 +35,7 @@ RUN rpm --import \
       nvtop \
       steam \
       syncthing \
+      system-config-printer \
       vdpauinfo \
       vim \
       virt-manager \
