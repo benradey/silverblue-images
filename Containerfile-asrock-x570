@@ -1,5 +1,11 @@
 FROM ghcr.io/benradey/workstation-nvidia-base:latest
 
+# Special handling for QL-600 label printer. This relies on the files inside of the RPM being manually extracted to /var/opt, which cannot be handled inside of this Containerfile.
+RUN ln -sf /opt/brother/PTouch/ql600/cupswrapper/brother_lpdwrapper_ql600 /usr/lib/cups/filter/brother_lpdwrapper_ql600 && \
+    dnf5 install -y \
+      perl-File-Copy && \
+    dnf5 clean all
+
 # Build nvidia akmod with flag that produces proprietary kernal driver for older hardware
 RUN echo "%_without_kmod_nvidia_detect 1" > /etc/rpm/macros.nvidia-kmod && \
     mkdir -p /var/log/akmods /var/cache/akmods/nvidia /var/tmp && \
