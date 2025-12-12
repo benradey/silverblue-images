@@ -33,6 +33,7 @@ RUN rpm --import \
       libva-utils \
       numlockx \
       nvtop \
+      qpdf \
       steam \
       syncthing \
       system-config-printer \
