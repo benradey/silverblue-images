@@ -18,8 +18,6 @@ RUN rpm --import \
       akmods \
       android-tools \
       ansible \
-      blueman \
-      blueman-nemo \
       cinnamon \
       distrobox \
       fuse-sshfs \
