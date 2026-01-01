@@ -6,8 +6,6 @@ RUN mkdir -p /var/log/akmods /var/cache/akmods/nvidia /var/tmp && \
     /usr/sbin/akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 
 RUN dnf5 install -y \
-      blueman \
-      blueman-nemo \
       dkms \
       python3-pyusb \
       radeontop \
