@@ -21,6 +21,7 @@ RUN rpm --import \
       fuse-sshfs \
       geany \
       git \
+      gnome-browser-connector \
       gnome-extensions-app \
       gnome-terminal \
       gnome-tweaks \
