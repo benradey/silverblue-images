@@ -93,10 +93,10 @@ RUN mkdir -p /var/log/akmods /var/cache/akmods/nvidia /var/tmp && \
 RUN test -f /usr/lib/sysusers.d/libvirt.conf || echo -e 'g libvirt 963' > /usr/lib/sysusers.d/libvirt.conf && \
     test -f /usr/lib/sysusers.d/qat.conf || echo -e 'g qat 995' > /usr/lib/sysusers.d/qat.conf
 
-# The first check makes sure that we have exactly 6 gpg pubkeys trusted in the rpmdb (the ones from the base image).
+# The first check makes sure that we have exactly 7 gpg pubkeys trusted in the rpmdb (the ones from the base image).
 # Any more than that means that dnf automatically added a new one, which is shady!
 # Then: cleanup image for linting
 # Finally: verify image is good
-RUN [[ 6 -eq $(rpm -qa gpg-pubkey* | wc -l) ]] && \
+RUN [[ 7 -eq $(rpm -qa gpg-pubkey* | wc -l) ]] && \
     rm -rf /var /boot && mkdir /var /boot && \
     bootc container lint --fatal-warnings --skip baseimage-composefs
