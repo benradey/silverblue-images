@@ -63,6 +63,7 @@ RUN dnf5 install -y \
       nut \
       nvidia-container-toolkit \
       nvidia-container-toolkit-base \
+      nvtop \
       pv \
       python3-certbot-nginx \
       qemu-kvm \
