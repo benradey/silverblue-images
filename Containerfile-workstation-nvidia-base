@@ -22,7 +22,6 @@ RUN rpm --import \
       geany \
       git \
       gnome-extensions-app \
-      gnome-screenshot \
       gnome-shell-extension-dash-to-panel \
       gnome-terminal \
       gnome-themes-extra \
