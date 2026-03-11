@@ -43,6 +43,8 @@ RUN dnf5 install -y \
       ansible \
       borgbackup \
       certbot \
+      cockpit \
+      cockpit-podman \
       distrobox \
       fail2ban \
       fuse-encfs \
