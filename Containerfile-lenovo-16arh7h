@@ -7,6 +7,7 @@ RUN mkdir -p /var/log/akmods /var/cache/akmods/nvidia /var/tmp && \
 
 RUN dnf5 install -y \
       dkms \
+      powertop \
       python3-pyusb \
       radeontop \
       uhubctl \
