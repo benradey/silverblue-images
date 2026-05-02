@@ -28,7 +28,6 @@ RUN git clone https://github.com/johnfanv2/LenovoLegionLinux.git && \
 # Any more than that means that dnf automatically added a new one, which is shady!
 # Then: cleanup image for linting
 # Finally: verify image is good
-# FIXME - remove the `--skip nonempty-run-tmp` when it's no longer needed
 RUN [[ 4 -eq $(rpm -qa gpg-pubkey* | wc -l) ]] && \
     rm -rf /var /boot && mkdir /var /boot && \
-    bootc container lint --fatal-warnings --skip nonempty-run-tmp
+    bootc container lint --fatal-warnings
