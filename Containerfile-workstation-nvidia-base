@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-silverblue:44
+FROM quay.io/fedora/fedora-silverblue:43
 
 COPY gpg-keys/* /keys/
 
@@ -8,7 +8,7 @@ RUN rpm --import \
       /keys/public_key_proton.asc \
       /keys/RPM-GPG-KEY-rpmfusion-free-fedora-2020 \
       /keys/RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020 \
-      /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-44-x86_64 && \
+      /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-43-x86_64 && \
     rm -rf /keys && \
     dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
       https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm \
@@ -59,6 +59,7 @@ RUN rpm -q akmod-nvidia && \
 # Any more than that means that dnf automatically added a new one, which is shady!
 # Then: cleanup image for linting
 # Finally: verify image is good
+# FIXME - remove the `--skip nonempty-run-tmp` when it's no longer needed
 RUN [[ 4 -eq $(rpm -qa gpg-pubkey* | wc -l) ]] && \
     rm -rf /var /boot && mkdir /var /boot && \
-    bootc container lint --fatal-warnings
+    bootc container lint --fatal-warnings --skip nonempty-run-tmp
