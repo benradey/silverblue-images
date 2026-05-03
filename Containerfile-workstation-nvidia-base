@@ -17,6 +17,7 @@ RUN rpm --import \
       akmods \
       android-tools \
       ansible \
+      cinnamon \
       distrobox \
       fuse-sshfs \
       geany \
