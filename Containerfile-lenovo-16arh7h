@@ -7,7 +7,6 @@ RUN mkdir -p /var/log/akmods /var/cache/akmods/nvidia /var/tmp && \
 
 # blueman necessary for cinnamon, not necessary for gnome
 RUN dnf5 install -y \
-      blueman \
       dkms \
       powertop \
       python3-pyusb \
