@@ -8,15 +8,21 @@ RUN rpm --import \
       /keys/public_key_proton.asc \
       /keys/RPM-GPG-KEY-rpmfusion-free-fedora-2020 \
       /keys/RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020 \
+      /keys/brave-core.asc \
       /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-43-x86_64 && \
     rm -rf /keys && \
     dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
       https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm \
       https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d' ' -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm && \
+    curl -fsSLo /etc/yum.repos.d/brave-browser.repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo && \
+    mkdir /var/opt /usr/brave.com && \
+    ln -s /usr/brave.com /var/opt/brave.com && \
+    echo "L /var/opt/brave.com - - - - /usr/brave.com" >> /usr/lib/tmpfiles.d/brave.conf && \
     dnf5 install -y \
       akmods \
       android-tools \
       ansible \
+      brave-browser \
       cinnamon \
       distrobox \
       fuse-sshfs \
@@ -56,11 +62,11 @@ RUN rpm -q akmod-nvidia && \
     rpm -q xorg-x11-drv-nvidia-cuda && \
     rpm -q proton-vpn-gnome-desktop
 
-# The first check makes sure that we have exactly 4 gpg pubkeys trusted in the rpmdb (the ones manually imported above).
+# The first check makes sure that we have exactly 10 gpg pubkeys trusted in the rpmdb (the ones manually imported above) (Brave adds 6, apparently?).
 # Any more than that means that dnf automatically added a new one, which is shady!
 # Then: cleanup image for linting
 # Finally: verify image is good
 # FIXME - remove the `--skip nonempty-run-tmp` when it's no longer needed
-RUN [[ 4 -eq $(rpm -qa gpg-pubkey* | wc -l) ]] && \
+RUN [[ 10 -eq $(rpm -qa gpg-pubkey* | wc -l) ]] && \
     rm -rf /var /boot && mkdir /var /boot && \
     bootc container lint --fatal-warnings --skip nonempty-run-tmp
